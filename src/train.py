@@ -30,7 +30,7 @@ model.fit(X_train, y_train)
 pred = model.predict(X_test)
 
 # Metrics
-rmse = mean_squared_error(y_test, pred, squared=False)
+rmse = mean_squared_error(y_test, pred) ** 0.5
 r2 = r2_score(y_test, pred)
 
 metrics = {
@@ -41,6 +41,5 @@ metrics = {
 
 print(metrics)
 
-# Save metrics
 with open("metrics.json", "w") as f:
     json.dump(metrics, f)
