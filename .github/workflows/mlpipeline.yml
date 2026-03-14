@@ -42,13 +42,6 @@ jobs:
           name: metrics
           path: metrics.json
 
-      - name: Download Previous Metrics
-        uses: actions/download-artifact@v4
-        with:
-          name: metrics
-          path: previous_metrics
-        continue-on-error: true
-
       - name: Compare Metrics
         id: compare
         run: |
@@ -59,22 +52,24 @@ jobs:
           new_rmse = new["RMSE"]
           new_r2 = new["R2"]
 
+          print("New RMSE:", new_rmse)
+          print("New R2:", new_r2)
+
           improved = True
 
-          if os.path.exists("previous_metrics/metrics.json"):
-              old = json.load(open("previous_metrics/metrics.json"))
+          if os.path.exists("previous_metrics.json"):
+              old = json.load(open("previous_metrics.json"))
               old_rmse = old["RMSE"]
               old_r2 = old["R2"]
 
               print("Old RMSE:", old_rmse)
-              print("New RMSE:", new_rmse)
               print("Old R2:", old_r2)
-              print("New R2:", new_r2)
 
               if not (new_rmse < old_rmse and new_r2 > old_r2):
                   improved = False
 
-          print("Improved:", improved)
+          with open("previous_metrics.json","w") as f:
+              json.dump(new,f)
 
           with open("improved.txt","w") as f:
               f.write(str(improved).lower())
@@ -83,7 +78,6 @@ jobs:
       - name: Write GitHub Summary
         run: |
           echo "## ML Pipeline Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Name:** R J Hari" >> $GITHUB_STEP_SUMMARY
           echo "**Roll Number:** 2022BCS0125" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
