@@ -23,8 +23,16 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Train model
-model = LinearRegression()
+from sklearn.ensemble import RandomForestRegressor
+
+model = RandomForestRegressor(
+    n_estimators=100,
+    random_state=42,
+    n_jobs=-1
+)
+
 model.fit(X_train, y_train)
+pred = model.predict(X_test)
 
 # Predictions
 pred = model.predict(X_test)
