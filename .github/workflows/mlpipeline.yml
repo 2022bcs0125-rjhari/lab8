@@ -43,6 +43,16 @@ jobs:
         name: metrics
         path: metrics.json
 
+    - name: Write GitHub Summary
+      run: |
+        echo "## ML Pipeline Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Name:** R J Hari" >> $GITHUB_STEP_SUMMARY
+        echo "**Roll Number:** 2022BCS0125" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Metrics" >> $GITHUB_STEP_SUMMARY
+        cat metrics.json >> $GITHUB_STEP_SUMMARY
+
     - name: Login to DockerHub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
